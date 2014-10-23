@@ -1,0 +1,10 @@
+parameters:
+    jihel.plugin.dynamic_parameter.manager.cache.class: Jihel\Plugin\DynamicParameterBundle\Manager\CacheManager
+
+services:
+    jihel.plugin.dynamic_parameter.manager.cache:
+        class: %jihel.plugin.dynamic_parameter.manager.cache.class%
+        arguments:
+            - '@service_container'
+            - %jihel.plugin.dynamic_parameter.allowed_namespaces%
+            - %jihel.plugin.dynamic_parameter.denied_namespaces%

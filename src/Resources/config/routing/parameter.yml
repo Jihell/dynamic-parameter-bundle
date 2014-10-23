@@ -1,0 +1,17 @@
+JihelPluginDynamicParameterBundle_parameter_index:
+    pattern: /
+    defaults: { _controller: JihelPluginDynamicParameterBundle:Parameter:index }
+    requirements:
+        _method: get|post
+
+JihelPluginDynamicParameterBundle_parameter_edit:
+    pattern: /{id}/edit
+    defaults: { _controller: JihelPluginDynamicParameterBundle:Parameter:edit }
+    requirements:
+        _method: get|post
+
+JihelPluginDynamicParameterBundle_parameter_delete:
+    pattern: /{id}/delete
+    defaults: { _controller: JihelPluginDynamicParameterBundle:Parameter:delete }
+    requirements:
+        _method: post

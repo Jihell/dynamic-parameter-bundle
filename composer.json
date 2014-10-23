@@ -1,0 +1,20 @@
+{
+    "name": "jihel/dynamic-parameter-bundle",
+    "description": "A SF2 bundle to register parameters from database to container",
+    "authors": [
+        {
+            "name": "Joseph Lemoine",
+            "email": "lemoine.joseph@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "doctrine/orm": ">=2.4",
+        "symfony/symfony": ">=2.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Jihel\\Plugin\\DynamicParameterBundle\\": "src"
+        }
+    }
+}

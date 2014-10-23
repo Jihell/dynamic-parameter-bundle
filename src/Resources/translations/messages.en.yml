@@ -1,0 +1,6 @@
+jihel.plugin.dynamic_parameter.parameter.form.name: Name
+jihel.plugin.dynamic_parameter.parameter.form.name.placeholder: Parameter's name
+jihel.plugin.dynamic_parameter.parameter.form.value: Value
+jihel.plugin.dynamic_parameter.parameter.form.value.placeholder: 123
+jihel.plugin.dynamic_parameter.parameter.form.type: Type
+jihel.plugin.dynamic_parameter.parameter.form.type.empty_value: Select a data type

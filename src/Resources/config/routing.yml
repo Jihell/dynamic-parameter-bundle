@@ -1,0 +1,3 @@
+JihelPluginDynamicParameterBundle_parameter:
+    resource: '@JihelPluginDynamicParameterBundle/Resources/config/routing/parameter.yml'
+    prefix: /parameter

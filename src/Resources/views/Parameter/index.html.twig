@@ -1,0 +1,68 @@
+{% extends 'JihelPluginDynamicParameterBundle::layout.html.twig' %}
+
+{% block jihel_main %}
+
+    <h2>{{ 'jihel.plugin.dynamic_parameter.parameter.index.add'|trans }}</h2>
+
+    {% for type, flashMessages in app.session.flashbag.all() %}
+        {% for flashMessage in flashMessages %}
+            <div class="alert alert-{{ type }}">
+                {{ flashMessage|trans }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    {{ form(form) }}
+
+    {% for namespace in allowedNamespaces|split(',') %}
+        <span class="label label-success">{{ namespace }}</span>
+    {% endfor %}
+    {% for namespace in deniedNamespaces|split(',') %}
+        <span class="label label-warning">{{ namespace }}</span>
+    {% endfor %}
+
+    <h2>{{ 'jihel.plugin.dynamic_parameter.parameter.index.title'|trans }}</h2>
+
+
+    <table class="table table-stripped table-bordered">
+        <thead>
+        <tr>
+            <th>{{ 'jihel.plugin.dynamic_parameter.parameter.index.th.id'|trans }}</th>
+            <th>{{ 'jihel.plugin.dynamic_parameter.parameter.index.th.name'|trans }}</th>
+            <th>{{ 'jihel.plugin.dynamic_parameter.parameter.index.th.namespace'|trans }}</th>
+            <th>{{ 'jihel.plugin.dynamic_parameter.parameter.index.th.value'|trans }}</th>
+            <th>{{ 'jihel.plugin.dynamic_parameter.parameter.index.th.type'|trans }}</th>
+            <th>{{ 'jihel.plugin.dynamic_parameter.parameter.index.th.action'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td>{{ entity.id }}</td>
+                <td>{{ entity.name }}</td>
+                <td>{{ entity.namespace }}</td>
+                <td>{{ entity.value }}</td>
+                <td>{{ entity.type }}</td>
+                <td>
+                    <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group">
+                            <a href="{{ path('JihelPluginDynamicParameterBundle_parameter_edit', {id: entity.id}) }}" class="btn btn-default">
+                                <span class="glyphicon glyphicon-edit"></span>
+                            </a>
+                        </div>
+                        <div class="btn-group">
+                        {{ form_start(deleteForms[entity.id]) }}
+                        {{ form_widget(deleteForms[entity.id]) }}
+                            <button type="submit" class="btn btn-warning">
+                                <span class="glyphicon glyphicon-remove-circle"></span>
+                            </button>
+                        {{ form_end(deleteForms[entity.id]) }}
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock jihel_main %}

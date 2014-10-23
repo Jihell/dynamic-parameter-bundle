@@ -1,0 +1,25 @@
+jihel.plugin.dynamic_parameter.parameter.form.name: Nom
+jihel.plugin.dynamic_parameter.parameter.form.name.placeholder: Nom du paramètre
+jihel.plugin.dynamic_parameter.parameter.form.namespace: Namespace
+jihel.plugin.dynamic_parameter.parameter.form.namespace.placeholder: jihel
+jihel.plugin.dynamic_parameter.parameter.form.value: Valeur
+jihel.plugin.dynamic_parameter.parameter.form.value.placeholder: 123
+jihel.plugin.dynamic_parameter.parameter.form.type: Type
+jihel.plugin.dynamic_parameter.parameter.form.type.empty_value: Choisisser un type de donnée
+jihel.plugin.dynamic_parameter.parameter.form.submit: Ajouter
+
+jihel.plugin.dynamic_parameter.parameter.index.add: Ajouter un paramètre dynamique
+jihel.plugin.dynamic_parameter.parameter.index.title: Liste Des Paramètres Dynamique
+jihel.plugin.dynamic_parameter.parameter.index.th.id: Id
+jihel.plugin.dynamic_parameter.parameter.index.th.name: Nom
+jihel.plugin.dynamic_parameter.parameter.index.th.namespace: Namespace
+jihel.plugin.dynamic_parameter.parameter.index.th.value: Valeur
+jihel.plugin.dynamic_parameter.parameter.index.th.type: Type
+jihel.plugin.dynamic_parameter.parameter.index.th.action: Action
+
+jihel.plugin.dynamic_parameter.parameter.edit.title: "Editer le paramètre #%id% \"%name%\""
+
+jihel.plugin.dynamic_parameter.parameter.create.success: Paramètre ajouté
+jihel.plugin.dynamic_parameter.parameter.update.success: Paramètre modifié
+jihel.plugin.dynamic_parameter.parameter.delete.success: Paramètre supprimé
+jihel.plugin.dynamic_parameter.parameter.delete.error: Impossible de supprimer le paramètre !

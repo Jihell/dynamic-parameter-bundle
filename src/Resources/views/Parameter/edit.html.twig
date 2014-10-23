@@ -1,0 +1,9 @@
+{% extends 'JihelPluginDynamicParameterBundle::layout.html.twig' %}
+
+{% block jihel_main %}
+
+    <h2>{{ 'jihel.plugin.dynamic_parameter.parameter.edit.title'|trans({'%id%': entity.id, '%name%': entity.name}) }}</h2>
+
+    {{ form(form) }}
+
+{% endblock jihel_main %}

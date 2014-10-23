@@ -1,0 +1,26 @@
+<?php
+/**
+ * @package dynamic-parameter-bundle
+ */
+namespace Jihel\Cache\DynamicParameterBundle{{ namespaceHash }}
+;
+use Jihel\Plugin\DynamicParameterBundle\Model\DynamicParameterCacheInterface;
+
+/**
+ * Class DynamicParameterCache
+ *
+ * @author Joseph LEMOINE <lemoine.joseph@gmail.com>
+ * @link http://www.joseph-lemoine.fr
+ */
+class DynamicParameterCache implements DynamicParameterCacheInterface
+{
+    /**
+     * @return array
+     */
+    public function getParameters()
+    {
+        return
+            {{ parameters }}
+        ;
+    }
+}

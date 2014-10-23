@@ -1,0 +1,8 @@
+parameters:
+    jihel.plugin.dynamic_parameter.doctrine_subscriber.class: Jihel\Plugin\DynamicParameterBundle\Listener\DoctrineListener
+
+services:
+    jihel.plugin.dynamic_parameter.doctrine_subscriber:
+        class: %jihel.plugin.dynamic_parameter.doctrine_subscriber.class%
+        arguments: [%jihel.plugin.dynamic_parameter.table_prefix%]
+        tags: [{ name: doctrine.event_subscriber }]
