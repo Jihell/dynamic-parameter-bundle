@@ -15,8 +15,6 @@ use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
  */
 class DoctrineListener implements \Doctrine\Common\EventSubscriber
 {
-    const loadClassMetadata = 'loadClassMetadata';
-
     const entity = 'Jihel\Plugin\DynamicParameterBundle\Entity\Parameter';
 
     /**
@@ -32,7 +30,7 @@ class DoctrineListener implements \Doctrine\Common\EventSubscriber
     public function getSubscribedEvents()
     {
         return array(
-            self::loadClassMetadata,
+            'loadClassMetadata',
         );
     }
 

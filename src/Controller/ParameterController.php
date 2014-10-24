@@ -29,6 +29,20 @@ class ParameterController extends Controller
      */
     public function indexAction(Request $request)
     {
+        $list = array(
+            'init.amount.new',
+            'render.skin',
+            'tracking.id',
+            'account.id',
+        );
+        foreach ($list as $key) {
+            if ($this->container->hasParameter($key)) {
+                echo $key.' => '.$this->container->getParameter($key).'<br/>';
+            } else {
+                echo $key.' -<br/>';
+            }
+        }
+
         $m          = $this->getDoctrine()->getManager();
         $parameter  = new Parameter();
         $form       = $this->createForm(new ParameterFormType(), $parameter);

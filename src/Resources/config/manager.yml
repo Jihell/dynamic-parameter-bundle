@@ -5,6 +5,4 @@ services:
     jihel.plugin.dynamic_parameter.manager.cache:
         class: %jihel.plugin.dynamic_parameter.manager.cache.class%
         arguments:
-            - '@service_container'
-            - %jihel.plugin.dynamic_parameter.allowed_namespaces%
-            - %jihel.plugin.dynamic_parameter.denied_namespaces%
+            - {kernel.cache_dir: %kernel.cache_dir%}
