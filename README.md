@@ -105,11 +105,15 @@ to yout **routing.yml** file:
 
 You will only see the keys visible in your namespace and with the column **isEditable** to true
 
+**/!\ You have te clean the cache when you update the keys /!\**
+
 
 4- Note
 -------
 
 Obviously if you load multiple keys with the same name, only one will be registered ...
+Beware of the location where you are executing the key add,
+you may have to clear the cache manually if you use a back / front app separation.
 
 
 5- Thanks

@@ -37,9 +37,7 @@ class ParameterController extends Controller
             $m->persist($parameter);
             $m->flush();
 
-            /** @var CacheManager $cacheManager */
-            $cacheManager = $this->get('jihel.plugin.dynamic_parameter.manager.cache');
-            $cacheManager->invalidateCache();
+            $this->rebuildCache();
 
             $session = $request->getSession();
             $session->getFlashBag()->add('success', 'jihel.plugin.dynamic_parameter.parameter.create.success');
@@ -79,9 +77,7 @@ class ParameterController extends Controller
             $m->persist($parameter);
             $m->flush();
 
-            /** @var CacheManager $cacheManager */
-            $cacheManager = $this->get('jihel.plugin.dynamic_parameter.manager.cache');
-            $cacheManager->invalidateCache();
+            $this->rebuildCache();
 
             $session = $request->getSession();
             $session->getFlashBag()->add('success', 'jihel.plugin.dynamic_parameter.parameter.update.success');
@@ -110,9 +106,7 @@ class ParameterController extends Controller
             $m->remove($parameter);
             $m->flush();
 
-            /** @var CacheManager $cacheManager */
-            $cacheManager = $this->get('jihel.plugin.dynamic_parameter.manager.cache');
-            $cacheManager->invalidateCache();
+            $this->rebuildCache();
 
             $session->getFlashBag()->add('success', 'jihel.plugin.dynamic_parameter.parameter.delete.success');
         } else {
@@ -150,5 +144,30 @@ class ParameterController extends Controller
             ))
             ->getForm()
         ;
+    }
+
+    /**
+     * @return int
+     * @throws \Jihel\Plugin\DynamicParameterBundle\Manager\Exception\UnwritableCacheException
+     */
+    protected function rebuildCache()
+    {
+        $allowedNamespaces  = $this->container->getParameter('jihel.plugin.dynamic_parameter.allowed_namespaces');
+        $deniedNamespaces   = $this->container->getParameter('jihel.plugin.dynamic_parameter.denied_namespaces');
+        $m = $this->getDoctrine()->getManager();
+        /** @var \Jihel\Plugin\DynamicParameterBundle\Repository\ParameterRepository $parameterRepository */
+        $parameterRepository = $m->getRepository('Jihel\Plugin\DynamicParameterBundle\Entity\Parameter');
+        $parameters          = $parameterRepository->findByNamespace($allowedNamespaces, $deniedNamespaces, false);
+        $cached = array();
+        if (!empty($parameters)) {
+            foreach ($parameters as $parameter) {
+                $cached[$parameter->getName()] = $parameter->getValue();
+            }
+        }
+
+        /** @var CacheManager $cacheManager */
+        $cacheManager = $this->get('jihel.plugin.dynamic_parameter.manager.cache');
+        $cacheManager->invalidateCache();
+        return $cacheManager->createCache($cached);
     }
 }

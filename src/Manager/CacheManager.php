@@ -142,6 +142,9 @@ class CacheManager
     public function invalidateCache()
     {
         $file = $this->getClassFileName();
+        if (file_exists($this->getCacheDir().DIRECTORY_SEPARATOR.'appDevDebugProjectContainer.php')) {
+            unlink($this->getCacheDir().DIRECTORY_SEPARATOR.'appDevDebugProjectContainer.php');
+        }
         if (file_exists($file)) {
             return unlink($this->getClassFileName());
         }

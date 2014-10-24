@@ -22,8 +22,6 @@ $allowedNamespaces  = $container->getParameter('jihel.plugin.dynamic_parameter.a
 $deniedNamespaces   = $container->getParameter('jihel.plugin.dynamic_parameter.denied_namespaces');
 $cacheManager = new CacheManager($container, $allowedNamespaces, $deniedNamespaces);
 if (!$cacheManager->loadFromCache()) {
-    echo 'Create Cache<br/>';
-
     // Start doctrine
     $entityManager = EntityManager::create(array(
         'driver'    => $container->getParameter('database_driver'),
@@ -55,14 +53,14 @@ if (!$cacheManager->loadFromCache()) {
                 $cached[$parameter->getName()] = $parameter->getValue();
             }
         }
+        echo '<pre>';
+        print_r($cached);
+        echo '</pre>';
 
-        var_dump($container->getParameter('jihel.plugin.dynamic_parameter.dynamic_parameter_cache'));
-        echo '<br/>';
         if (true === $container->getParameter('jihel.plugin.dynamic_parameter.dynamic_parameter_cache')
             || 'env' === $container->getParameter('jihel.plugin.dynamic_parameter.dynamic_parameter_cache')
             && 'prod' === $env
         ) {
-            echo 'Save Cache<br/>';
             $cacheManager->createCache($cached);
         }
     }
@@ -74,6 +72,4 @@ if (!$cacheManager->loadFromCache()) {
     unset($schemaManager);
     unset($cached);
     unset($cacheManager);
-} else {
-    echo 'Load cache<br/>';
 }
