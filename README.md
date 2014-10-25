@@ -22,7 +22,11 @@ or
 
     php composer.phar require jihel/dynamic-parameter-bundle
 
-Add bundle to AppKernel.php
+Update your AppKernel.php by using the Kernel class provided by the bundle, and register it
+
+    use Jihel\Plugin\DynamicParameterBundle\HttpKernel\Kernel;
+
+    ...
 
     public function registerBundles()
     {
@@ -31,6 +35,16 @@ Add bundle to AppKernel.php
             new Jihel\Plugin\DynamicParameterBundle\JihelPluginDynamicParameterBundle(),
         );
     }
+
+Add to your parameter.yml:
+
+    parameters:
+        jihel.plugin.dynamic_parameter.table_prefix: whatever # can be '' for no prefix, will be 'jihel_' by default
+
+Install database table:
+
+    php app/console doctrine:schema:update
+    
 
 ### Optional
 
@@ -59,45 +73,25 @@ Exemple:
     </VirtualHost>
 
 
-2- Configure your config.yml
-----------------------------
+2- Configure cache management
+-----------------------------
 
-Add bundle to your config.yml
-
-    imports:
-        - { resource: database.php }
-        - { resource: ../../vendor/jihel/dynamic-parameter-bundle/src/parameters.php }
-        - { resource: parameters.yml }
-        ...
-
-As the database configuration is not already loaded, you have to use an external file like
-the one provided by the bundle.
-copy the file `database.yml.dist` to a safe location and rename it to `database.yml`
-
-Replace the placeholder with your parameters for keys
-
-- `database_driver`
-- `database_host`
-- `database_port`
-- `database_name`
-- `database_user`
-- `database_password`
-- `jihel.plugin.dynamic_parameter.dynamic_parameter_cache`: Will save in cache the parameters from database. accepted values ['env'|true|false]
-- `jihel.plugin.dynamic_parameter.apache_parameter_cache`: Will save in cache the parameters from vhost. accepted values ['env'|true|false]
-- `jihel.plugin.dynamic_parameter.table_prefix`: You can change the table prefix by what you want
+    parameters.yml
+        jihel.plugin.dynamic_parameter.dynamic_parameter_cache: ['env'|true|false]
+        jihel.plugin.dynamic_parameter.apache_parameter_cache: ['env'|true|false]
 
 The 'env' value will use the cache only in production environment
+true will enable it anytime.
 
-You don't have to define it again in the usual parameter.yml,
-except if you want to overload the dynamic configuration
+The keys will be invalidate automaticaly if you use the controller provided.
 
 
 3- Usage
 --------
 
-Add parameters keys to you database
+Add parameters keys to you database.
 You can create a crud of your own but a default one is present, to enable it just add the route
-to yout **routing.yml** file:
+to your **routing.yml** file:
 
     JihelPluginDynamicParameterBundle:
         resource: '@JihelPluginDynamicParameterBundle/Resources/config/routing.yml'
@@ -105,7 +99,7 @@ to yout **routing.yml** file:
 
 You will only see the keys visible in your namespace and with the column **isEditable** to true
 
-**/!\ You have te clean the cache when you update the keys /!\**
+**/!\ You have to clean the cache when you update the keys directly from database /!\**
 
 
 4- Note
@@ -113,7 +107,7 @@ You will only see the keys visible in your namespace and with the column **isEdi
 
 Obviously if you load multiple keys with the same name, only one will be registered ...
 Beware of the location where you are executing the key add,
-you may have to clear the cache manually if you use a back / front app separation.
+you may have to clear the cache manually if you use a back / front app separation, so be carefull.
 
 
 5- Thanks
