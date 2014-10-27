@@ -143,9 +143,8 @@ class ParameterCache
      * @return int
      * @throws Exception\UnwritableCacheException
      */
-    public function createCache(array $parameters, $invalidate = false)
+    public function createCache(array $parameters)
     {
-        !$invalidate or $this->invalidateCache();
         $dumper = new DynamicParameterDumper();
         $content = $dumper->dump(array('parameters' => $parameters, 'namespaceHash' => $this->namespaceHash));
 
@@ -153,9 +152,19 @@ class ParameterCache
             mkdir($this->getClassCacheDir(), 0777, true);
         }
 
-        if (false === ($out = file_put_contents($this->getClassFileName(), $content))) {
-            throw new Exception\UnwritableCacheException(sprintf('Can\'t create cache file %s', $this->getClassFileName()));
+        // Atomic cache creation
+        try {
+            if (false === ($out = file_put_contents($this->getClassFileName().'.tmp', $content))) {
+                throw new Exception\UnwritableCacheException(sprintf('Can\'t create cache file %s', $this->getClassFileName().'.tmp'));
+            }
+            if (false === rename($this->getClassFileName().'.tmp', $this->getClassFileName())) {
+                throw new Exception\UnwritableCacheException(sprintf('Can\'t rename cache file %s', $this->getClassFileName().'.tmp'));
+            }
+        } catch (Exception\UnwritableCacheException $e) {
+            $this->invalidateCache();
+            throw $e;
         }
+
         return $out;
     }
 
@@ -166,6 +175,9 @@ class ParameterCache
     {
         $file = $this->getClassFileName();
         if (file_exists($file)) {
+            return unlink($this->getClassFileName());
+        }
+        if (file_exists($file.'.tmp')) {
             return unlink($this->getClassFileName());
         }
         return true;
