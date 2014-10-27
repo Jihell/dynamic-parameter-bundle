@@ -4,7 +4,9 @@
  */
 namespace Jihel\Plugin\DynamicParameterBundle\Manager;
 
+use Jihel\Plugin\DynamicParameterBundle\DependencyInjection\Dumper\DynamicParameterDumper;
 use Jihel\Plugin\DynamicParameterBundle\Model\DynamicParameterCacheInterface;
+use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\DependencyInjection\Container;
 
 /**
@@ -31,11 +33,11 @@ class CacheManager
     protected $cacheDir;
 
     /**
-     * @param array $parameters
+     * @param string $cacheDir
      */
-    public function __construct(array $parameters)
+    public function __construct($cacheDir)
     {
-        $this->cacheDir = $parameters['kernel.cache_dir'];
+        $this->cacheDir = $cacheDir;
         $this
             ->loadNamespaceHash()
             ->registerAutoload()
@@ -66,7 +68,7 @@ class CacheManager
      *
      * Autoload class in cache
      */
-    public function registerAutoload()
+    final private function registerAutoload()
     {
         if (false === static::$autoloadCalled) {
             spl_autoload_register(function($class) {
@@ -115,6 +117,14 @@ class CacheManager
     }
 
     /**
+     * @return bool
+     */
+    public function isCached()
+    {
+        return class_exists($this->getClassName());
+    }
+
+    /**
      * Load dynamic parameters from cache
      *
      * @return bool
@@ -135,15 +145,12 @@ class CacheManager
      * @return int
      * @throws Exception\UnwritableCacheException
      */
-    public function createCache(array $parameters)
+    public function createCache(array $parameters, $invalidate = false)
     {
-        $content = file_get_contents(__DIR__.static::templateLocation);
-        $keyMap = array(
-            '{{ parameters }}'      => var_export($parameters, true),
-            '{{ namespaceHash }}'   => '\\'.$this->namespaceHash,
-        );
+        !$invalidate or $this->invalidateCache();
+        $dumper = new DynamicParameterDumper();
+        $content = $dumper->dump(array('parameters' => $parameters, 'namespaceHash' => $this->namespaceHash));
 
-        $content = str_replace(array_keys($keyMap), array_values($keyMap), $content);
         if (!is_dir($this->getClassCacheDir())) {
             mkdir($this->getClassCacheDir(), 0777, true);
         }
@@ -160,9 +167,6 @@ class CacheManager
     public function invalidateCache()
     {
         $file = $this->getClassFileName();
-        if (file_exists($this->getCacheDir().DIRECTORY_SEPARATOR.'appDevDebugProjectContainer.php')) {
-            unlink($this->getCacheDir().DIRECTORY_SEPARATOR.'appDevDebugProjectContainer.php');
-        }
         if (file_exists($file)) {
             return unlink($this->getClassFileName());
         }

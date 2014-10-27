@@ -29,21 +29,21 @@ abstract class Kernel extends BaseKernel
      */
     protected function initializeContainer()
     {
-        $customClass = $this->getCustomContainerClass();
-        $class = $this->getContainerClass();
-        $customCache = new ConfigCache($this->getCacheDir().'/'.$customClass.'.php', $this->debug);
-        $cache = new ConfigCache($this->getCacheDir().'/'.$class.'.php', $this->debug);
+        $customClass    = $this->getCustomContainerClass();
+        $baseClass      = $this->getContainerClass();
+        $customCache    = new ConfigCache($this->getCacheDir().'/'.$customClass.'.php', $this->debug);
+        $baseCache      = new ConfigCache($this->getCacheDir().'/'.$baseClass.'.php', $this->debug);
         $fresh = true;
-        if (!$cache->isFresh()) {
+        if (!$baseCache->isFresh() || !$customCache->isFresh()) {
             $container = $this->buildContainer();
             $container->compile();
-            $this->dumpContainer($cache, $container, $class, $this->getContainerBaseClass());
-            $this->dumpCustomContainer($customCache, $container, $class);
+            $this->dumpContainer($baseCache, $container, $baseClass, $this->getContainerBaseClass());
+            $this->dumpCustomContainer($customCache, $container, $baseClass);
 
             $fresh = false;
         }
 
-        require_once $cache;
+        require_once $baseCache;
         require_once $customCache;
 
         $this->container = new $customClass();
@@ -96,8 +96,8 @@ abstract class Kernel extends BaseKernel
      */
     protected function dumpCustomContainer(ConfigCache $cache, ContainerBuilder $container, $baseClass)
     {
-        $dumper = new CustomContainerDumper();
-        $content = $dumper->dump($baseClass);
+        $dumper  = new CustomContainerDumper();
+        $content = $dumper->dump(array('base_class' => $baseClass, 'prefix' => static::customContainerOverloadClassPrefix));
         if (!$this->debug) {
             $content = static::stripComments($content);
         }

@@ -1,0 +1,13 @@
+parameters:
+    jihel.plugin.dynamic_parameter.parameter.loader.class: Jihel\Plugin\DynamicParameterBundle\DependencyInjection\Loader\ParameterLoader
+
+services:
+    jihel.plugin.dynamic_parameter.parameter.loader:
+        class: %jihel.plugin.dynamic_parameter.parameter.loader.class%
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@jihel.plugin.dynamic_parameter.manager.cache"
+            - %jihel.plugin.dynamic_parameter.allowed_namespaces%
+            - %jihel.plugin.dynamic_parameter.denied_namespaces%
+            - %jihel.plugin.dynamic_parameter.dynamic_parameter_cache%
+            - %kernel.environment%

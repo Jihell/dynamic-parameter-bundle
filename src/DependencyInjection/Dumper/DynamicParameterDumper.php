@@ -10,27 +10,27 @@ namespace Jihel\Plugin\DynamicParameterBundle\DependencyInjection\Dumper;
  * @author Joseph LEMOINE <lemoine.joseph@gmail.com>
  * @link http://www.joseph-lemoine.fr
  */
-class CustomContainerDumper
+class DynamicParameterDumper
 {
-    const templateLocation = '/../../Resources/views/Cache/ContainerDumpDecoratorCache.php.twig';
+    const templateLocation = '/../../Resources/views/Cache/DynamicParameterCache.php.twig';
 
     /**
-     * Dumps the service container as a PHP class.
+     * Dumps the dynamic parameters cache as a PHP class.
      *
      * Available options:
      *
-     *  * prefix:     The class prefix
-     *  * base_class: The base class name
+     *  * parameters:     The parameters
+     *  * namespaceHash:  The namespace names hashed
      *
      * @param array $options An array of options
-     * @return string A PHP class representing of the service container
+     * @return string A PHP class representing of the dynamic parameters for the given namespace
      */
     public function dump(array $options = array())
     {
         $content = file_get_contents(__DIR__.static::templateLocation);
         $keyMap = array(
-            '{{ prefix }}'      => $options['prefix'],
-            '{{ parentClass }}' => $options['base_class'],
+            '{{ parameters }}'      => var_export($options['parameters'], true),
+            '{{ namespaceHash }}'   => '\\'.$options['namespaceHash'],
         );
 
         return str_replace(array_keys($keyMap), array_values($keyMap), $content);

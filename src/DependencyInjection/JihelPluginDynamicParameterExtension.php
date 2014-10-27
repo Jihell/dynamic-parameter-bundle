@@ -26,8 +26,8 @@ class JihelPluginDynamicParameterExtension extends Extension
         $this->registerNamespaces($container);
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('listener.yml');
+        $loader->load('loader.yml');
         $loader->load('manager.yml');
-        $this->registerParameters($container);
     }
 
     /**
@@ -41,15 +41,8 @@ class JihelPluginDynamicParameterExtension extends Extension
         if (!$container->hasParameter('jihel.plugin.dynamic_parameter.denied_namespaces')) {
             $container->setParameter('jihel.plugin.dynamic_parameter.denied_namespaces', null);
         }
-    }
-
-    /**
-     * @param ContainerBuilder $container
-     */
-    protected function registerParameters(ContainerBuilder $container)
-    {
-        /** @var CacheManager $cacheManager */
-        $cacheManager = $container->get('jihel.plugin.dynamic_parameter.manager.cache');
-        $cacheManager->loadFromCache();
+        if (!$container->hasParameter('jihel.plugin.dynamic_parameter.dynamic_parameter_cache')) {
+            $container->setParameter('jihel.plugin.dynamic_parameter.dynamic_parameter_cache', true);
+        }
     }
 }

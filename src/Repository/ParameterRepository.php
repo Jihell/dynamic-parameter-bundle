@@ -5,7 +5,6 @@
 namespace Jihel\Plugin\DynamicParameterBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\QueryBuilder;
 use Jihel\Plugin\DynamicParameterBundle\Entity\Parameter;
 
 /**

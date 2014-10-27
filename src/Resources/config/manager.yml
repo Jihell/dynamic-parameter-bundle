@@ -4,5 +4,4 @@ parameters:
 services:
     jihel.plugin.dynamic_parameter.manager.cache:
         class: %jihel.plugin.dynamic_parameter.manager.cache.class%
-        arguments:
-            - {kernel.cache_dir: %kernel.cache_dir%}
+        arguments: [%kernel.cache_dir%]

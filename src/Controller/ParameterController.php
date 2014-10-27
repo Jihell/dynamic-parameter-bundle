@@ -4,6 +4,7 @@
  */
 namespace Jihel\Plugin\DynamicParameterBundle\Controller;
 
+use Jihel\Plugin\DynamicParameterBundle\DependencyInjection\Loader\ParameterLoader;
 use Jihel\Plugin\DynamicParameterBundle\Entity\Parameter;
 use Jihel\Plugin\DynamicParameterBundle\Form\Type\ParameterFormType;
 
@@ -34,6 +35,8 @@ class ParameterController extends Controller
             'render.skin',
             'tracking.id',
             'account.id',
+            'jihel.plugin.dynamic_parameter.allowed_namespaces',
+            'jihel.plugin.dynamic_parameter.denied_namespaces',
         );
         foreach ($list as $key) {
             if ($this->container->hasParameter($key)) {
@@ -166,22 +169,12 @@ class ParameterController extends Controller
      */
     protected function rebuildCache()
     {
-        $allowedNamespaces  = $this->container->getParameter('jihel.plugin.dynamic_parameter.allowed_namespaces');
-        $deniedNamespaces   = $this->container->getParameter('jihel.plugin.dynamic_parameter.denied_namespaces');
-        $m = $this->getDoctrine()->getManager();
-        /** @var \Jihel\Plugin\DynamicParameterBundle\Repository\ParameterRepository $parameterRepository */
-        $parameterRepository = $m->getRepository('Jihel\Plugin\DynamicParameterBundle\Entity\Parameter');
-        $parameters          = $parameterRepository->findByNamespace($allowedNamespaces, $deniedNamespaces, false);
-        $cached = array();
-        if (!empty($parameters)) {
-            foreach ($parameters as $parameter) {
-                $cached[$parameter->getName()] = $parameter->getValue();
-            }
-        }
+        /** @var ParameterLoader $parameterLoader */
+        $parameterLoader = $this->get('jihel.plugin.dynamic_parameter.parameter.loader');
+        $dynamicParameters = $parameterLoader->load();
 
         /** @var CacheManager $cacheManager */
         $cacheManager = $this->get('jihel.plugin.dynamic_parameter.manager.cache');
-        $cacheManager->invalidateCache();
-        return $cacheManager->createCache($cached);
+        return $cacheManager->createCache($dynamicParameters, true);
     }
 }
