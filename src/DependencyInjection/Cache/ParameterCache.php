@@ -2,20 +2,18 @@
 /**
  * @package dynamic-parameter-bundle
  */
-namespace Jihel\Plugin\DynamicParameterBundle\Manager;
+namespace Jihel\Plugin\DynamicParameterBundle\DependencyInjection\Cache;
 
 use Jihel\Plugin\DynamicParameterBundle\DependencyInjection\Dumper\DynamicParameterDumper;
 use Jihel\Plugin\DynamicParameterBundle\Model\DynamicParameterCacheInterface;
-use Symfony\Component\Config\ConfigCache;
-use Symfony\Component\DependencyInjection\Container;
 
 /**
- * Class CacheManager
+ * Class ParameterCache
  *
  * @author Joseph LEMOINE <lemoine.joseph@gmail.com>
  * @link http://www.joseph-lemoine.fr
  */
-class CacheManager
+class ParameterCache
 {
     const templateLocation  = '/../Resources/views/Cache/DynamicParameterCache.php.twig';
     const templateClass     = 'Jihel\Cache\DynamicParameterBundle\%s\DynamicParameterCache';

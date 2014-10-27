@@ -2,7 +2,7 @@
 /**
  * @package dynamic-parameter-bundle
  */
-namespace Jihel\Plugin\DynamicParameterBundle\Manager\Exception;
+namespace Jihel\Plugin\DynamicParameterBundle\DependencyInjection\Cache\Exception;
 
 /**
  * Class UnwritableCacheException

@@ -4,11 +4,10 @@
  */
 namespace Jihel\Plugin\DynamicParameterBundle\DependencyInjection\Loader\Bean;
 
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Tools\Setup;
+use Jihel\Plugin\DynamicParameterBundle\DependencyInjection\Cache\ParameterCache;
 
-use Jihel\Plugin\DynamicParameterBundle\Listener\DoctrineListener;
-use Jihel\Plugin\DynamicParameterBundle\Manager\CacheManager;
+use Doctrine\ORM\EntityManager;
+use Jihel\Plugin\DynamicParameterBundle\DependencyInjection\Loader\EnvironmentLoader;
 
 /**
  * Class ParameterLoaderBean
@@ -24,9 +23,9 @@ abstract class ParameterLoaderBean
     protected $entityManager;
 
     /**
-     * @var CacheManager
+     * @var ParameterCache
      */
-    protected $cacheManager;
+    protected $parameterCache;
 
     /**
      * @var string
@@ -55,24 +54,22 @@ abstract class ParameterLoaderBean
 
     /**
      * @param EntityManager $entityManager
-     * @param CacheManager $cacheManager
-     * @param string $allowedNamespaces
-     * @param string $deniedNamespaces
+     * @param ParameterCache $parameterCache
+     * @param EnvironmentLoader $environmentLoader
      * @param string|bool $cachingStrategy Can be ['env'|true|false]
      * @param string $kernelEnvironment
      */
     public function __construct(
         EntityManager $entityManager,
-        CacheManager $cacheManager,
-        $allowedNamespaces,
-        $deniedNamespaces,
+        ParameterCache $parameterCache,
+        EnvironmentLoader $environmentLoader,
         $cachingStrategy,
         $kernelEnvironment
     ) {
         $this->entityManager     = $entityManager;
-        $this->cacheManager      = $cacheManager;
-        $this->allowedNamespaces = $allowedNamespaces;
-        $this->deniedNamespaces  = $deniedNamespaces;
+        $this->parameterCache    = $parameterCache;
+        $this->allowedNamespaces = $environmentLoader->get('jihel.plugin.dynamic_parameter.allowed_namespaces');
+        $this->deniedNamespaces  = $environmentLoader->get('jihel.plugin.dynamic_parameter.denied_namespaces');
         $this->cachingStrategy   = $cachingStrategy;
         $this->kernelEnvironment = $kernelEnvironment;
     }

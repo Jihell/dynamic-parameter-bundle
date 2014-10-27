@@ -7,9 +7,10 @@ namespace Jihel\Plugin\DynamicParameterBundle\DependencyInjection\Factory;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Setup;
 
+use Jihel\Plugin\DynamicParameterBundle\DependencyInjection\Cache\ParameterCache;
+use Jihel\Plugin\DynamicParameterBundle\DependencyInjection\Loader\EnvironmentLoader;
 use Jihel\Plugin\DynamicParameterBundle\DependencyInjection\Loader\ParameterLoader;
 use Jihel\Plugin\DynamicParameterBundle\Listener\DoctrineListener;
-use Jihel\Plugin\DynamicParameterBundle\Manager\CacheManager;
 
 /**
  * Class ParameterLoaderFactory
@@ -27,6 +28,7 @@ class ParameterLoaderFactory
     public function __construct(array $parameters = array())
     {
         $this->parameters = $parameters;
+        $this->environmentLoader = new EnvironmentLoader();
     }
 
     /**
@@ -36,9 +38,8 @@ class ParameterLoaderFactory
     {
         return new ParameterLoader(
             $this->getEntityManager(),
-            $this->getCacheManager(),
-            $this->getParameter('jihel.plugin.dynamic_parameter.allowed_namespaces'),
-            $this->getParameter('jihel.plugin.dynamic_parameter.denied_namespaces'),
+            $this->getParameterCache(),
+            $this->environmentLoader,
             $this->getParameter('jihel.plugin.dynamic_parameter.dynamic_parameter_cache'),
             $this->getParameter('kernel.environment')
         );
@@ -84,10 +85,10 @@ class ParameterLoaderFactory
     }
 
     /**
-     * @return CacheManager
+     * @return ParameterCache
      */
-    protected function getCacheManager()
+    protected function getParameterCache()
     {
-        return new CacheManager($this->getParameter('kernel.cache_dir'));
+        return new ParameterCache($this->getParameter('kernel.cache_dir'));
     }
 }

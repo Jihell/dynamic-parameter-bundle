@@ -4,11 +4,11 @@
  */
 namespace Jihel\Plugin\DynamicParameterBundle\Controller;
 
+use Jihel\Plugin\DynamicParameterBundle\DependencyInjection\Cache\ParameterCache;
 use Jihel\Plugin\DynamicParameterBundle\DependencyInjection\Loader\ParameterLoader;
 use Jihel\Plugin\DynamicParameterBundle\Entity\Parameter;
 use Jihel\Plugin\DynamicParameterBundle\Form\Type\ParameterFormType;
 
-use Jihel\Plugin\DynamicParameterBundle\Manager\CacheManager;
 use Jihel\Plugin\DynamicParameterBundle\Repository\ParameterRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,22 +30,6 @@ class ParameterController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $list = array(
-            'init.amount.new',
-            'render.skin',
-            'tracking.id',
-            'account.id',
-            'jihel.plugin.dynamic_parameter.allowed_namespaces',
-            'jihel.plugin.dynamic_parameter.denied_namespaces',
-        );
-        foreach ($list as $key) {
-            if ($this->container->hasParameter($key)) {
-                echo $key.' => '.$this->container->getParameter($key).'<br/>';
-            } else {
-                echo $key.' -<br/>';
-            }
-        }
-
         $m          = $this->getDoctrine()->getManager();
         $parameter  = new Parameter();
         $form       = $this->createForm(new ParameterFormType(), $parameter);
@@ -165,16 +149,16 @@ class ParameterController extends Controller
 
     /**
      * @return int
-     * @throws \Jihel\Plugin\DynamicParameterBundle\Manager\Exception\UnwritableCacheException
+     * @throws \Jihel\Plugin\DynamicParameterBundle\DependencyInjection\Cache\Exception\UnwritableCacheException
      */
     protected function rebuildCache()
     {
         /** @var ParameterLoader $parameterLoader */
-        $parameterLoader = $this->get('jihel.plugin.dynamic_parameter.parameter.loader');
-        $dynamicParameters = $parameterLoader->load();
+        $parameterLoader = $this->get('jihel.plugin.dynamic_parameter.loader.parameter');
+        $dynamicParameters = $parameterLoader->load(true);
 
-        /** @var CacheManager $cacheManager */
-        $cacheManager = $this->get('jihel.plugin.dynamic_parameter.manager.cache');
-        return $cacheManager->createCache($dynamicParameters, true);
+        /** @var ParameterCache $parameterCache */
+        $parameterCache = $this->get('jihel.plugin.dynamic_parameter.cache.parameter');
+        return $parameterCache->createCache($dynamicParameters, true);
     }
 }

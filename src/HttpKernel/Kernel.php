@@ -5,6 +5,7 @@
 namespace Jihel\Plugin\DynamicParameterBundle\HttpKernel;
 
 use Jihel\Plugin\DynamicParameterBundle\DependencyInjection\Dumper\CustomContainerDumper;
+
 use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;

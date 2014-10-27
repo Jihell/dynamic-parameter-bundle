@@ -4,7 +4,6 @@
  */
 namespace Jihel\Plugin\DynamicParameterBundle\DependencyInjection;
 
-use Jihel\Plugin\DynamicParameterBundle\Manager\CacheManager;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
@@ -25,9 +24,9 @@ class JihelPluginDynamicParameterExtension extends Extension
     {
         $this->registerNamespaces($container);
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('cache.yml');
         $loader->load('listener.yml');
         $loader->load('loader.yml');
-        $loader->load('manager.yml');
     }
 
     /**

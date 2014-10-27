@@ -1,0 +1,7 @@
+parameters:
+    jihel.plugin.dynamic_parameter.cache.parameter.class: Jihel\Plugin\DynamicParameterBundle\DependencyInjection\Cache\ParameterCache
+
+services:
+    jihel.plugin.dynamic_parameter.cache.parameter:
+        class: %jihel.plugin.dynamic_parameter.cache.parameter.class%
+        arguments: [%kernel.cache_dir%]

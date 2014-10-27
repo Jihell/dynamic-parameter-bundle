@@ -1,13 +1,15 @@
 parameters:
-    jihel.plugin.dynamic_parameter.parameter.loader.class: Jihel\Plugin\DynamicParameterBundle\DependencyInjection\Loader\ParameterLoader
+    jihel.plugin.dynamic_parameter.loader.parameter.class: Jihel\Plugin\DynamicParameterBundle\DependencyInjection\Loader\ParameterLoader
+    jihel.plugin.dynamic_parameter.loader.environment.class: Jihel\Plugin\DynamicParameterBundle\DependencyInjection\Loader\EnvironmentLoader
 
 services:
-    jihel.plugin.dynamic_parameter.parameter.loader:
-        class: %jihel.plugin.dynamic_parameter.parameter.loader.class%
+    jihel.plugin.dynamic_parameter.loader.environment:
+        class: %jihel.plugin.dynamic_parameter.loader.environment.class%
+    jihel.plugin.dynamic_parameter.loader.parameter:
+        class: %jihel.plugin.dynamic_parameter.loader.parameter.class%
         arguments:
             - "@doctrine.orm.entity_manager"
-            - "@jihel.plugin.dynamic_parameter.manager.cache"
-            - %jihel.plugin.dynamic_parameter.allowed_namespaces%
-            - %jihel.plugin.dynamic_parameter.denied_namespaces%
+            - "@jihel.plugin.dynamic_parameter.cache.parameter"
+            - "@jihel.plugin.dynamic_parameter.loader.environment"
             - %jihel.plugin.dynamic_parameter.dynamic_parameter_cache%
             - %kernel.environment%
