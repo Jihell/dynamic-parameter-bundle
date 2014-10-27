@@ -79,12 +79,7 @@ Exemple:
     parameters.yml
         jihel.plugin.dynamic_parameter.dynamic_parameter_cache: ['env'|true|false]
 
-The 'env' value will use the cache only in production environment
-true will enable it anytime.
-
-The keys will be invalidate automatically if you use the controller provided.
-Else you will have to use the service `jihel.plugin.dynamic_parameter.manager.cache`
-The method 
+The 'env' value will use the cache only in production environment true will enable it anytime. 
 
 
 3- Usage
@@ -102,7 +97,17 @@ You will only see the keys visible in your namespace and with the column **isEdi
 
 **/!\ You have to clean the cache when you update the keys directly from database /!\**
 
-To manualy rebuild the cache avec an update, you can
+The keys will be invalidate automatically if you use the controller provided.
+Else you will have to use the service `jihel.plugin.dynamic_parameter.loader.parameter` and
+`jihel.plugin.dynamic_parameter.cache.parameter` like this:
+
+        /** @var \Jihel\Plugin\DynamicParameterBundle\DependencyInjection\Loader\ParameterLoader $parameterLoader */
+        $parameterLoader = $this->get('jihel.plugin.dynamic_parameter.loader.parameter');
+        $dynamicParameters = $parameterLoader->load(true);
+
+        /** @var \Jihel\Plugin\DynamicParameterBundle\DependencyInjection\Cache\ParameterCache $parameterCache */
+        $parameterCache = $this->get('jihel.plugin.dynamic_parameter.cache.parameter');
+        $parameterCache->createCache($dynamicParameters, true);
 
 
 4- Note
@@ -110,7 +115,7 @@ To manualy rebuild the cache avec an update, you can
 
 Obviously if you load multiple keys with the same name, only one will be registered ...
 Beware of the location where you are executing the key add,
-you may have to clear the cache manually if you use a back / front app separation.
+you may have to clear the cache manually if you use a back / front app separation, so be carefull.
 
 
 5 - Important !
