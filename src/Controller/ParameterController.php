@@ -159,6 +159,6 @@ class ParameterController extends Controller
 
         /** @var ParameterCache $parameterCache */
         $parameterCache = $this->get('jihel.plugin.dynamic_parameter.cache.parameter');
-        return $parameterCache->createCache($dynamicParameters, true);
+        return $parameterCache->createCache($dynamicParameters);
     }
 }
