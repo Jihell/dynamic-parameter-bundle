@@ -116,9 +116,25 @@ you may have to clear the cache manually if you use a back / front app separatio
 5 - Important !
 ---------------
 
-You have to know that the environment parameters in vhost will no longer be cached !
-It should not be a performance issue but you may experience slight changes 
-(like a normal behaviour ...) if you share sources between vhost.
+You have to know that the environment parameters in vhost will no longer be cached,
+or at least, everywhere but in the service definition (yeah I know ...).
+
+Symfony2 replace the parameter keys by their raw values in cache.
+Because of this you can't use dynamic parameters in the dependencie injection system
+if you share the source code between project.
+A workaround for *environment vars* is provided with the service `jihel.plugin.dynamic_parameter.loader.environment`.
+
+To use them anyway a possible workaround is to inject the service container (yeah I know ... Again ...) directly
+in you service instead of only the key.
+
+I'd like to change the way it's done but rewriting the PhpDumper completely may not be a clean solution.
+So as usual with those damn private and not protected functions (and you know there is a lot in SF2 ...),
+deal with it, inject the container but discard it just after usage like this.
+
+    public function __construct(Container $container)
+    {
+        $this->myDynamicParameter = $container->getParameter('jihel.dynamic.myDynamic');
+    }
 
 
 6- Thanks
