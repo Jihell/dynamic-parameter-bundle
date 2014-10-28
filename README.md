@@ -96,18 +96,22 @@ to your **routing.yml** file:
 You will only see the keys visible in your namespace and with the column **isEditable** to true
 
 **/!\ You have to clean the cache when you update the keys directly from database /!\**
+If you use a back end / front end logic with two separated cache, you have to use the command to cleanup
+after each modifications :
 
-The keys will be invalidate automatically if you use the controller provided.
+    php app/console jihel:parameter:purge-cache
+
+The keys will be invalidate automatically (in the current cache) if you use the controller provided.
 Else you will have to use the service `jihel.plugin.dynamic_parameter.loader.parameter` and
 `jihel.plugin.dynamic_parameter.cache.parameter` like this:
 
-        /** @var \Jihel\Plugin\DynamicParameterBundle\DependencyInjection\Loader\ParameterLoader $parameterLoader */
-        $parameterLoader = $this->get('jihel.plugin.dynamic_parameter.loader.parameter');
-        $dynamicParameters = $parameterLoader->load(true);
+    /** @var \Jihel\Plugin\DynamicParameterBundle\DependencyInjection\Loader\ParameterLoader $parameterLoader */
+    $parameterLoader = $this->get('jihel.plugin.dynamic_parameter.loader.parameter');
+    $dynamicParameters = $parameterLoader->load(true);
 
-        /** @var \Jihel\Plugin\DynamicParameterBundle\DependencyInjection\Cache\ParameterCache $parameterCache */
-        $parameterCache = $this->get('jihel.plugin.dynamic_parameter.cache.parameter');
-        $parameterCache->createCache($dynamicParameters, true);
+    /** @var \Jihel\Plugin\DynamicParameterBundle\DependencyInjection\Cache\ParameterCache $parameterCache */
+    $parameterCache = $this->get('jihel.plugin.dynamic_parameter.cache.parameter');
+    $parameterCache->createCache($dynamicParameters, true);
 
 
 4- Note
