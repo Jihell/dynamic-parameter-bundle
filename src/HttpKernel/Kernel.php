@@ -37,6 +37,9 @@ abstract class Kernel extends BaseKernel
         $fresh = true;
         if (!$baseCache->isFresh() || !$customCache->isFresh()) {
             $container = $this->buildContainer();
+            if (!$container->hasParameter('jihel.plugin.dynamic_parameter.table_prefix')) {
+                $container->setParameter('jihel.plugin.dynamic_parameter.table_prefix', 'jihel_');
+            }
             $container->compile();
             $this->dumpContainer($baseCache, $container, $baseClass, $this->getContainerBaseClass());
             $this->dumpCustomContainer($customCache, $container, $baseClass);
