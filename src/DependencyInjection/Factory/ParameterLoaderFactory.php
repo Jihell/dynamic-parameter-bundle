@@ -78,6 +78,9 @@ class ParameterLoaderFactory
         ));
 
         // Register table prefix name
+        if (null === $this->getParameter('jihel.plugin.dynamic_parameter.table_prefix')) {
+            $this->parameters['jihel.plugin.dynamic_parameter.table_prefix'] = 'jihel_';
+        }
         $doctrineListener = new DoctrineListener($this->getParameter('jihel.plugin.dynamic_parameter.table_prefix'));
         $doctrineListener->registerEventManager($entityManager->getEventManager());
 

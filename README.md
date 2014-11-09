@@ -51,8 +51,8 @@ Install database table:
 You can define some namespaces keys to load from you vhost configuration.
 
 The is two keys:
-- SYMFONY__JIHEL__PLUGIN__DYNAMIC_PARAMETER__ALLOW_NAMESPACES
-- SYMFONY__JIHEL__PLUGIN__DYNAMIC_PARAMETER__DENY_NAMESPACES
+- SYMFONY__JIHEL__PLUGIN__DYNAMIC_PARAMETER__ALLOWED_NAMESPACES
+- SYMFONY__JIHEL__PLUGIN__DYNAMIC_PARAMETER__DENIED_NAMESPACES
 
 You can specify multiple namespaces with a comma separator.
 The request is associative as you can specify both allowed and denied namespaces.

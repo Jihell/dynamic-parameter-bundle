@@ -53,6 +53,7 @@ class ParameterCache
         if (isset($_SERVER['SYMFONY__JIHEL__PLUGIN__DYNAMIC_PARAMETER__ALLOWED_NAMESPACES'])) {
             $allowedNamespaces = $_SERVER['SYMFONY__JIHEL__PLUGIN__DYNAMIC_PARAMETER__ALLOWED_NAMESPACES'];
         }
+
         if (isset($_SERVER['SYMFONY__JIHEL__PLUGIN__DYNAMIC_PARAMETER__DENIED_NAMESPACES'])) {
             $deniedNamespaces  = $_SERVER['SYMFONY__JIHEL__PLUGIN__DYNAMIC_PARAMETER__DENIED_NAMESPACES'];
         }

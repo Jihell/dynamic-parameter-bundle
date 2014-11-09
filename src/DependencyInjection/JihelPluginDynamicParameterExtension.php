@@ -43,5 +43,8 @@ class JihelPluginDynamicParameterExtension extends Extension
         if (!$container->hasParameter('jihel.plugin.dynamic_parameter.dynamic_parameter_cache')) {
             $container->setParameter('jihel.plugin.dynamic_parameter.dynamic_parameter_cache', true);
         }
+        if (!$container->hasParameter('jihel.plugin.dynamic_parameter.table_prefix')) {
+            $container->setParameter('jihel.plugin.dynamic_parameter.table_prefix', 'jihel_');
+        }
     }
 }
