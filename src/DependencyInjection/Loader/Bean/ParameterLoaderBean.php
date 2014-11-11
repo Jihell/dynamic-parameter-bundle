@@ -5,9 +5,9 @@
 namespace Jihel\Plugin\DynamicParameterBundle\DependencyInjection\Loader\Bean;
 
 use Jihel\Plugin\DynamicParameterBundle\DependencyInjection\Cache\ParameterCache;
-
-use Doctrine\ORM\EntityManager;
 use Jihel\Plugin\DynamicParameterBundle\DependencyInjection\Loader\EnvironmentLoader;
+use Jihel\Plugin\DynamicParameterBundle\Model\ParameterLoaderInterface;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Class ParameterLoaderBean
@@ -15,7 +15,7 @@ use Jihel\Plugin\DynamicParameterBundle\DependencyInjection\Loader\EnvironmentLo
  * @author Joseph LEMOINE <lemoine.joseph@gmail.com>
  * @link http://www.joseph-lemoine.fr
  */
-abstract class ParameterLoaderBean
+abstract class ParameterLoaderBean implements ParameterLoaderInterface
 {
     /**
      * @var EntityManager

@@ -9,6 +9,7 @@ use Doctrine\ORM\Tools\Setup;
 
 use Jihel\Plugin\DynamicParameterBundle\DependencyInjection\Cache\ParameterCache;
 use Jihel\Plugin\DynamicParameterBundle\DependencyInjection\Loader\EnvironmentLoader;
+use Jihel\Plugin\DynamicParameterBundle\DependencyInjection\Loader\FailSafeParameterLoader;
 use Jihel\Plugin\DynamicParameterBundle\DependencyInjection\Loader\ParameterLoader;
 use Jihel\Plugin\DynamicParameterBundle\Listener\DoctrineListener;
 
@@ -36,13 +37,19 @@ class ParameterLoaderFactory
      */
     public function get()
     {
-        return new ParameterLoader(
-            $this->getEntityManager(),
-            $this->getParameterCache(),
-            $this->environmentLoader,
-            $this->getParameter('jihel.plugin.dynamic_parameter.dynamic_parameter_cache'),
-            $this->getParameter('kernel.environment')
-        );
+        try {
+            $loader = new ParameterLoader(
+                $this->getEntityManager(),
+                $this->getParameterCache(),
+                $this->environmentLoader,
+                $this->getParameter('jihel.plugin.dynamic_parameter.dynamic_parameter_cache'),
+                $this->getParameter('kernel.environment')
+            );
+        } catch (\PDOException $e) {
+            $loader = new FailSafeParameterLoader();
+        }
+
+        return $loader;
     }
 
     /**
@@ -83,6 +90,9 @@ class ParameterLoaderFactory
         }
         $doctrineListener = new DoctrineListener($this->getParameter('jihel.plugin.dynamic_parameter.table_prefix'));
         $doctrineListener->registerEventManager($entityManager->getEventManager());
+
+        // Test connection
+        $entityManager->getConnection()->connect();
 
         return $entityManager;
     }
