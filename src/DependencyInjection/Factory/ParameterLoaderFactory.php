@@ -45,7 +45,7 @@ class ParameterLoaderFactory
                 $this->getParameter('jihel.plugin.dynamic_parameter.dynamic_parameter_cache'),
                 $this->getParameter('kernel.environment')
             );
-        } catch (\PDOException $e) {
+        } catch (\Exception $e) {
             $loader = new FailSafeParameterLoader();
         }
 
