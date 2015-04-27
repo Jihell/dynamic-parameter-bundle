@@ -145,6 +145,47 @@ deal with it, inject the container but discard it just after usage like this.
         $this->myDynamicParameter = $container->getParameter('jihel.dynamic.myDynamic');
     }
 
+You also might experience some issues with the cache management (shared templates etc), as a simple workaround you can create a cache directory for each domain.
+
+    /**
+     * {@inheritdoc}
+     *
+     * @api
+     */
+    public function getCacheDir()
+    {
+        if (!isset($_SERVER['HTTP_HOST'])) {
+            return $this->rootDir.'/../var/cache/'.$this->environment;
+        }
+
+        $dir = $this->rootDir.'/../var/cache/'.$this->sanitiseDomainName($_SERVER['HTTP_HOST']);
+        if (!is_dir($dir)) {
+            mkdir($dir, 0777, true);
+        }
+
+        return $dir.DIRECTORY_SEPARATOR.$this->environment;
+    }
+
+    /**
+     * Remove all subdomain in the name
+     *
+     * @param string $name
+     * @return string
+     */
+    public function sanitiseDomainName($name)
+    {
+        $exp = explode('.', $name);
+        $length = $exp[count($exp)-1] === 'pp' ? -3 : -2;
+        return strtolower(implode('.', array_splice($exp, $length)));
+    }
+
+Pro:
+- Quick workaround
+
+Con:
+- No cache warmup
+- Inode consumption
+
 
 6- Thanks
 ---------
